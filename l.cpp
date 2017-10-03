@@ -63,21 +63,11 @@ void liste::insertt(maillon * x) {
 		x->pred = queue;
 		queue = x;
 	}
-	/*
-	x->succ = NULL;
-	x->pred = queue;
-	if(vide()) {
-		tete = x;
-	} else {
-		queue->succ = x;
-	}
-	queue = x;*/
 }
 maillon * liste::Recherche(int k) {
 	maillon * x = tete;
-	while((x)&&(x->val!=k)) {
-		x=x->succ;
-		return x;
+	if(!vide()) {
+		while((x->val != k)&&(x)) x=x->succ;
 	}
 	return x;
 }
@@ -99,4 +89,5 @@ int main() {
 	L.InsertionEnTete(y);
 	L.InsertionEnQueue(v);	
 	L.print();
+	cout << L.Recherche(5)->val << endl;
 }
