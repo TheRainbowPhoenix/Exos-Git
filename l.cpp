@@ -79,9 +79,17 @@ void liste::Suppression(maillon * x) {
 	}
 	if(x->succ != NULL) {
 		(x->succ)->pred = x->pred;
+	} else {
+		queue = x->pred;
 	}
 	//delete x;
 	free(x);
+}
+void liste::SuppressionEnQueue() {
+	Suppression(queue);
+}
+void liste::SuppressionEnTete() {
+	Suppression(tete);
 }
 
 int main() {
@@ -103,6 +111,12 @@ int main() {
 	L.print();
 	L.Suppression(x);
 	// === x n'existe plus ===
+	L.print();
+	L.SuppressionEnQueue();
+	L.print();
+	L.SuppressionEnTete();
+	L.print();
+	L.SuppressionEnQueue();
 	L.print();
 	cout << L.Recherche(5)->val << endl;
 }

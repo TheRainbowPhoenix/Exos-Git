@@ -19,4 +19,6 @@ class liste {
 		void insertt(maillon * x);
 		maillon * Recherche(int k);
 		void Suppression(maillon * x);
+		void SuppressionEnQueue();
+		void SuppressionEnTete();
 };
