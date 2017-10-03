@@ -71,6 +71,18 @@ maillon * liste::Recherche(int k) {
 	}
 	return x;
 }
+void liste::Suppression(maillon * x) {
+	if(x->pred != NULL) {
+		(x->pred)->succ = x->succ;
+	} else {
+		tete = x->succ;
+	}
+	if(x->succ != NULL) {
+		(x->succ)->pred = x->pred;
+	}
+	//delete x;
+	free(x);
+}
 
 int main() {
 	liste L;
@@ -88,6 +100,9 @@ int main() {
 	L.print();
 	L.InsertionEnTete(y);
 	L.InsertionEnQueue(v);	
+	L.print();
+	L.Suppression(x);
+	// === x n'existe plus ===
 	L.print();
 	cout << L.Recherche(5)->val << endl;
 }
