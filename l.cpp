@@ -47,16 +47,23 @@ void liste::InsertionEnTete(maillon * x) {
 	tete->pred = NULL;
 }
 void liste::InsertionEnQueue(maillon * x) {
-	x->succ = NULL;
-	x->pred = queue;
-	if(!vide()) {
-		queue->succ=x;
+	if(vide()) {
+		tete = queue = x;
 	} else {
-		tete = x;
+		queue->succ = x;
+		x->pred = queue;
+		queue = x;
 	}
-	queue = x;
 }
 void liste::insertt(maillon * x) {
+	if(vide()) {
+		tete = queue = x;
+	} else {
+		queue->succ = x;
+		x->pred = queue;
+		queue = x;
+	}
+	/*
 	x->succ = NULL;
 	x->pred = queue;
 	if(vide()) {
@@ -64,7 +71,7 @@ void liste::insertt(maillon * x) {
 	} else {
 		queue->succ = x;
 	}
-	queue = x;
+	queue = x;*/
 }
 maillon * liste::Recherche(int k) {
 	maillon * x = tete;
@@ -77,19 +84,19 @@ maillon * liste::Recherche(int k) {
 
 int main() {
 	liste L;
+	maillon *v = new maillon(6);
 	maillon *w = new maillon(4);
 	maillon *x = new maillon(2);
 	maillon *y = new maillon(3);
 	maillon *z = new maillon(5);
 	if(L.vide()) cout<<"empty\n";
-	L.insertt(z);
+	L.InsertionEnQueue(z);
 	L.print();
 	L.InsertionEnTete(x);
 	L.print();
-	L.insertt(w);
+	L.InsertionEnQueue(w);
 	L.print();
 	L.InsertionEnTete(y);
-	//L.InsertionEnTete(z);
-	//L.insertt(z);	
+	L.InsertionEnQueue(v);	
 	L.print();
 }
