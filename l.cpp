@@ -97,6 +97,7 @@ void liste::SuppressionEnTete() {
 
 pile::pile() {
 	tete = 0;
+	max = M;
 	tab = new int(max);
 }
 pile::pile(int n) {
@@ -130,6 +131,45 @@ void pile::print() {
 	std::cout << "]" << std::endl;
 }
 
+file::file() {
+	tete = 0;
+	max = M;
+	tab = new int(max);
+	queue = 0;
+}
+file::file(int n) {
+	tete = 0;
+	max = n;
+	tab = new int(n);
+	queue = 0;
+}
+file::~file() {
+	delete [] tab;
+}
+bool file::vide() {
+	return (queue==0)?true:false;
+}
+bool file::pleine() {
+	return (queue>=max)?true:false;
+}
+bool file::Enfiler(int x) {
+	if(pleine()) return false;
+	tab[queue] = x;
+	queue++;
+	return true;
+}
+int file::Defiler() {
+	if(queue == 0) return 0;
+	int j = tab[tete];
+	tete++;
+	return j;
+}
+void file::print() {
+	std::cout << "[ ";
+	for(int i=tete;i<queue;i++)
+		std::cout << tab[i] << " | ";
+	std::cout << endl;
+}
 
 int main() {
 	liste L;
@@ -173,4 +213,13 @@ int main() {
 	cout << P.depiler() << endl;
 	P.print();
 	cout << P.depiler() << endl;
+	file F(100);
+	F.print();
+	F.Enfiler(6);
+	F.Enfiler(2);
+	F.Enfiler(1);
+	F.print();
+	cout << F.Defiler() << endl;
+	cout << F.Defiler() << endl;
+	F.print();
 }

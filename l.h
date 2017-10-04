@@ -35,3 +35,18 @@ class pile {
 		int depiler();
 		void print();
 };
+class file {
+	int tete;
+	int queue;
+	int * tab;
+	int max;
+	public:
+		file();
+		file(int n);
+		~file();
+		bool vide();
+		bool pleine();
+		bool Enfiler(int x);
+		int Defiler();
+		void print();
+};
