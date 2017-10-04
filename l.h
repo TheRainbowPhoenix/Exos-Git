@@ -22,3 +22,16 @@ class liste {
 		void SuppressionEnQueue();
 		void SuppressionEnTete();
 };
+class pile {
+	int tete;
+	int * tab;
+	int max;
+	public:
+		pile();
+		pile(int n);
+		~pile();
+		bool vide();
+		bool empiler(int x);
+		int depiler();
+		void print();
+};

@@ -1,6 +1,9 @@
 #include <iostream>
 #include "l.h"
 using namespace std;
+
+const int M = 1000;
+
 liste::liste() {
 	tete = NULL;
 	queue = NULL;
@@ -92,6 +95,42 @@ void liste::SuppressionEnTete() {
 	Suppression(tete);
 }
 
+pile::pile() {
+	tete = 0;
+	tab = new int(max);
+}
+pile::pile(int n) {
+	tete = 0;
+	tab = new int(n);
+	max = n;
+}
+pile::~pile() {
+	delete [] tab;
+}
+bool pile::vide() {
+	return (tete=0)?false:true;
+}
+bool pile::empiler(int x) {
+	if(tete == max) return false;
+	tab[tete] = x;
+	tete++;
+	return true;
+}
+int pile::depiler() {
+	if(tete == 0) return 0;
+	int j = tab[tete-1];
+	tab[tete-1] = NULL;
+	tete--;
+	return j;
+}
+void pile::print() {
+	std::cout << "[ ";
+	for(int i=0; i<tete;i++)
+		std::cout << tab[i] << " ";
+	std::cout << "]" << std::endl;
+}
+
+
 int main() {
 	liste L;
 	maillon *v = new maillon(6);
@@ -119,4 +158,19 @@ int main() {
 	L.SuppressionEnQueue();
 	L.print();
 	cout << L.Recherche(5)->val << endl;
+	pile P(100);
+	P.print();
+	cout << P.vide() << endl;
+	P.print();
+	P.depiler();
+	P.empiler(6);
+	P.empiler(2);
+	P.empiler(1);
+	P.print();
+	//P.depiler();
+	cout << P.depiler() << endl;
+	cout << P.depiler() << endl;
+	cout << P.depiler() << endl;
+	P.print();
+	cout << P.depiler() << endl;
 }
