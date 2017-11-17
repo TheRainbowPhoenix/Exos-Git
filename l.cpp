@@ -222,4 +222,8 @@ int main() {
 	cout << F.Defiler() << endl;
 	cout << F.Defiler() << endl;
 	F.print();
+	F.Defiler();
+	F.Enfiler(3);
+	F.Enfiler(4);
+	F.print();
 }
