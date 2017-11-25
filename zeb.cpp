@@ -236,7 +236,7 @@ int main() {
 
 
 	M.insertx(a1, 1, 5);
-	M.inserty(2, a2, 3);
+	M.insertx(a2, 3, 2);
 
 	M.print();
 
