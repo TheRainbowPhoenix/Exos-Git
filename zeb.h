@@ -18,6 +18,7 @@ class Mat {
 	public:
 		Mat();
 		~Mat();
+		void malloc();
 		void print();
 		void pprint();
 		void insert(int x, int y, int v);

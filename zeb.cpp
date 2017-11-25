@@ -64,6 +64,10 @@ Mat::Mat() {
 	for(int i=0; i<5; i++) G[i]=new int[5];
 }
 
+void Mat::malloc() {
+	for(int i=0; i<5; i++) for(int j=0; j<5; j++) G[j][i]=0;
+}
+
 Mat::~Mat() {
 	for(int i=0; i<5; i++) 	delete G[i];
 	delete [] G;
@@ -115,6 +119,7 @@ void Mat::insertxy(int **xy, int xs, int ys) {
 
 int main() {
 	Mat M;
+	M.malloc();
 	int x1[5] = {1,2,3,4,5};
 	int x2[5] = {2,3,4,5,1};
 	int x3[5] = {3,4,5,1,2};
