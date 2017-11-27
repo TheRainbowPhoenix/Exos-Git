@@ -6,10 +6,10 @@ using namespace std;
 string color(int i) {
 	switch(i) {
 		case 1: return "red"; break;
-		case 2: return "green"; break;
-		case 3: return "white"; break;
-		case 4: return "yellow"; break;
-		case 5: return "blue"; break;
+		case 2: return "blue"; break;
+		case 3: return "green"; break;
+		case 4: return "white"; break;
+		case 5: return "yellow"; break;
 	}
 	return "NULL";
 }
@@ -20,7 +20,7 @@ string drink(int i) {
 		case 2: return "milk"; break;
 		case 3: return "wine"; break;
 		case 4: return "water"; break;
-		case 5: return "thea"; break;
+		case 5: return "tea"; break;
 	}
 	return "NULL";
 }
@@ -117,6 +117,98 @@ void Mat::insertxy(int **xy, int xs, int ys) {
 	for(xs; xs>0; xs--) for(ys=i; ys>0; ys--) if(xy[ys-1][xs-1]<6) G[ys-1][xs-1]=xy[ys-1][xs-1];
 }
 
+void Mat::bfill(int sz) {
+	int x, y = sz;
+	int c = 0;
+	int bx = 0;
+	int by = 0;
+
+	for(x=sz; x>0; x--) {
+		for(y=sz; y>0; y--) {
+			if(G[y-1][x-1]==0) {
+				bx=x;
+				by=y;
+			} else {
+				c+=G[y-1][x-1];
+			}
+		}
+		if(15-c<6 && bx != 0) {
+			G[by-1][bx-1]=15-c;
+			//cout<<15-c<<" "<<bx<<by<<endl;
+		}
+		c=0;
+		bx=0;
+		by=0;
+	}
+}
+
+bool searchIn(int * ct, int ** cm, int sz)
+{
+	int i = 0;
+	for(int j=0; j<sz; j++) {
+		while(cm[j][i]==ct[i]) i++;
+		if(i>4) return true; //si i==5 ne marche pas sur certains compilateurs mais remarche après avoir compilé une fois avec i>4.
+		i=0;
+	}
+	return false;
+}
+
+int ** lcomp(int ** lm, int sz) {
+	//init matrice de retour
+	int ** cm;
+	cm=new int*[19];
+	for(int i=0; i<19; i++) cm[i]=new int[5];
+
+	for(int i=0; i<19; i++) {
+		for(int j=0; j<5; j++) {
+			cm[i][j]=0;
+		}
+	}
+
+  cout << "matrice lm" << endl;
+	for(int i=0; i<sz; i++) {
+		for(int j=0; j<5; j++) {
+			cout << lm[i][j] << " ";
+		}
+		cout << endl;
+	}
+  cout << endl;
+
+	//compte les 6
+	// copier lm dans lm2
+	//comparer ligne lm à lignes lm2 (copier lm)
+	//lm ligne 1 comparé à lm2 ligne 1 puis 2 puis 3 puis 4
+	//ligne suivante, etc
+	//si ligne de lm = ligne lm2 on skip.
+	//puis afficher les deux matrices.
+
+int x, y = sz;
+int c = 0;
+int o = 0;
+int p = 0;
+int ctmp[5] = {0,0,0,0,0};
+
+for(int z=0; z<sz; z++) {
+		for(x=0; x<sz; x++) {
+			y=0;
+			//while (y<5 && ! ( lm[x][y] != 6 && lm[z][y] != 6)) {
+			while (y<5 && ((lm[x][y]==6 || lm[z][y]==6) || (lm[x][y]==6 && lm[z][y]==6))) {
+				ctmp[y] = lm[x][y]+lm[z][y]-6;
+				y++;
+			}
+			if(y==5) {
+				if(! searchIn(ctmp, cm, 19)) {
+					for(int i=0; i<5; i++) {
+						cm[c][i]=ctmp[i];
+					}
+					c++;
+				}
+			}
+		}
+	}
+	return cm;
+}
+
 int main() {
 	Mat M;
 	M.malloc();
@@ -153,24 +245,64 @@ int main() {
 	// cout << endl;
 	// M.insertxy(m, 3, 3);
 	// M.print();
-	//M.pprint();
+	// M.pprint();
 	//cout << endl << color(3) << drink(2) << pet(4) << smoke(5) << natn(1)<<endl;
 
 	/* Init Infos */
 
 	/* linear */
-	int l1[5] = {1,6,6,6,1}; // !c1			!l3	!l4	l5	!l6	l7
-	//int l2[5] = {6,6,1,6,2};
-	int l3[5] = {3,1,6,6,6}; // !c1 !l1			!l4	l5	l6	!l7
-	int l4[5] = {6,5,6,6,3}; // !c1 !l1	!l3			l5	!l6	!l7
-	int l5[5] = {6,6,2,1,6}; // !c1 l1	l3	l4	l5	!l6	!l7
-	int l6[5] = {6,6,6,4,5}; // !c1 !l1	l3	!l4	!l5			!l7
-	int l7[5] = {6,3,6,5,6}; // !c1 l1	!l3	!l4	!l5	!l6
-	//int l8[5] = {5,6,6,6,2};
-	//int l9[5] = {5,6,6,2,6};
+	int l1[5] = {1,6,6,6,1}; // l5	l7
+	int l2[5] = {6,6,1,6,2}; // l3	l7	l8
+	int l3[5] = {3,1,6,6,6}; // l5	l6
+	int l4[5] = {6,5,6,6,3}; // l5 => keep
+	int l5[5] = {6,6,2,1,6}; // l1	l3	l4	l5
+	int l6[5] = {6,6,6,4,5}; // l3
+	int l7[5] = {6,3,6,5,6}; // l1
+	int l8[5] = {5,6,6,2,6}; // l2	l4 =>keep
+
+
+	// lcomp : generate potential compressed condition */
+	int ** lm;
+	lm=new int*[8];
+	for(int i=0; i<8; i++) lm[i]=new int[5];
+	lm[0]=l1;
+	lm[1]=l2;
+	lm[2]=l3;
+	lm[3]=l4;
+	lm[4]=l5;
+	lm[5]=l6;
+	lm[6]=l7;
+	lm[7]=l8;
+	lm = lcomp(lm,8);
+
+	cout << "Potentials conditions :" << endl;
+
+	for(int i=0; i<18; i++) {
+		if(lm[i][0]!=0) {
+			for(int j=0; j<5; j++) {
+				cout << lm[i][j] << " ";
+			}
+			cout << endl;
+		}
+	}
+
+
 
 	int a1[5] = {6,6,6,6,4}; // absolute condition
 	int a2[2] = {6,2};
+
+	/* potential compressed condition */
+	int c1[5] = {5,5,6,2,3}; // l4 + l8
+	int c2[5] = {1,3,6,5,1}; // l1 + l7
+	int c3[5] = {3,1,2,1,6}; // l3 + l5
+	int c4[5] = {6,5,2,1,3}; // l4 + l5
+
+	int c5[5] = {1,6,2,1,1}; // l1 + l5 => la seule utile
+	int c6[5] = {3,1,6,4,5}; // l3 + l6 => avec elle
+	int c7[5] = {6,3,1,5,2}; // l2 + l7 => utile
+
+	int c8[5] = {5,6,1,2,6}; // l2 + l8
+
 
 	/* floating condition 1 */
 
@@ -211,34 +343,90 @@ int main() {
 	// 	cout << endl;
 	// }
 
-	/* compressed condition */
-	int c1[5] = {5,6,1,2,2}; // l2 + l8 + l9
+	// F4 : [1] 4 à coté de [1] 3
 
-	/* potential compressed condition */
-	int c2[5] = {1,3,0,5,1}; // l1 + l7
-	int c3[5] = {3,1,2,1,0}; // l3 + l5
-	int c4[5] = {0,5,2,1,3}; // l4 + l5
-	int c5[5] = {1,0,2,1,1}; // l1 + l5
-	int c6[5] = {3,1,0,4,5}; // l3 + l6
 
 	/* potential solutions groups */
-	// g1 = c1 + c2 + c3 + l4 + l6
-	int g1_1[5] = {5,0,1,2,2};
-	int g1_2[5] = {1,3,0,5,1};
-	int g1_3[5] = {3,1,2,1,0};
-	int g1_4[5] = {6,5,6,6,3};
-	int g1_5[5] = {6,6,6,4,5};
-	// g2 = c1 + c2 + c4 + c6
-	int g2_1[5] = {1,3,0,5,1};
-	int g2_2[5] = {0,5,2,1,3};
-	int g2_3[5] = {3,1,0,4,5};
-	int g2_4[5] = {5,0,1,2,2};
+	// g1 = l8 + l4 + c5 + c7 + c6
+	int g1_1[5] = {5,0,0,2,0};
+	int g1_2[5] = {0,5,0,0,3};
+	int g1_3[5] = {1,0,2,1,1};
+	int g1_4[5] = {0,3,1,5,2};
+	int g1_5[5] = {3,1,0,4,5};
 
+/*
+=> met les a
+0 0 0 0 0
+0 0 2 0 0
+0 0 0 0 0
+0 0 0 0 0
+4 0 0 0 0
 
+=> met les g // si plusieurs, plusieurs schémas
+5 0 1 0 3
+0 5 2 3 1
+0 0 2 1 0
+2 0 1 5 4
+4 3 1 2 5
+
+=> application primaires des f (sures)
+5 * 1 *? 3 // 4 ? 2 *
+0 5 2 3 1
+* ? 2 1 0 // 4 ? 3 *
+2 * 1 5 4 // 3 *
+4 3 1 2 5
+
+=> application secondaire des f (à partir du schéma précédent)
+5 * 1 4 3 // 2 *
+0 5 2 3 1
+* 4 2 1 0 // 3 *
+2 * 1 5 4 // 3 *
+4 3 1 2 5
+
+=> bfill de la matrice
+5 2 1 4 3
+0 5 2 3 1
+3 4 2 1 0
+2 3 1 5 4
+4 3 1 2 5
+
+//------------------
+
+*/
+
+int s1[5] = {5,6,3,2,6};
+int s2[5] = {2,5,4,3,3};
+int s3[5] = {1,6,2,1,1};
+int s4[5] = {4,3,1,5,2};
+int s5[5] = {3,1,6,4,5};
+
+/*
+=> résultat final, go pprint()
+5 2 1 4 3
+4 5 2 3 1
+3 4 2 1 5
+2 3 1 5 4
+4 3 1 2 5
+*/
+
+	// Insert initial conditions (a1 and a2)
 	M.insertx(a1, 1, 5);
 	M.insertx(a2, 3, 2);
 
-	M.print();
+	// insert lines with a f-processor
+	M.insertx(s1, 1, 5);
+	M.insertx(s2, 2, 5);
+	M.insertx(s3, 3, 5);
+	M.insertx(s4, 4, 5);
+	M.insertx(s5, 5, 5);
+
+
+	// replace the 0 by their value
+	M.bfill(5);
+
+//TODO: Backtracking plz
+
+	M.pprint();
 
 	return 0;
 }

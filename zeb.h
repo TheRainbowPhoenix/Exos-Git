@@ -25,4 +25,5 @@ class Mat {
 		void insertx(int * x, int y, int sz);
 		void inserty(int x, int *y, int sz);
 		void insertxy(int **xy, int xs, int ys);
+		void bfill(int sz);
 };
