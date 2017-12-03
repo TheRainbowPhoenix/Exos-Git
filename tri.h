@@ -5,7 +5,8 @@ class Table {
 		int * TFus(int h, int q);
 		int * Merge(int h, int q, int m);
 		int * TQui(int h, int q);
-		int * Part(int h, int q, int m);
+		int Part(int h, int q);
+		int * heapyfit(int sz, int i);
 	public:
 		Table();
 		Table(int size);
@@ -17,6 +18,7 @@ class Table {
 		void TInsr();
 		void TFusn();
 		void TQuik();
+		void THeap();
 		void Tests();
 		~Table();
 };
